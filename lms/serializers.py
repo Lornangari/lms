@@ -4,6 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 from .models import Course, Enrollment
 from .models import Announcement
 from .models import Assignment
+from .models import Submission
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -70,3 +71,11 @@ class AssignmentSerializer(serializers.ModelSerializer):
         fields = ['id', 'course', 'title', 'description', 'due_date', 'created_at', 'created_by']
 
 
+class SubmissionSerializer(serializers.ModelSerializer):
+    assignment = serializers.StringRelatedField()
+    student = serializers.StringRelatedField()
+
+    class Meta:
+        model = Submission
+        fields = ['id', 'assignment', 'student', 'content', 'submitted_at', 'grade', 'feedback']
+        read_only_fields = ['student', 'submitted_at']

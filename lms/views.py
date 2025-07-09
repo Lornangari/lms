@@ -11,6 +11,9 @@ from .models import Announcement
 from .serializers import AnnouncementSerializer
 from .models import Assignment
 from .serializers import AssignmentSerializer
+from .models import Submission
+from .serializers import SubmissionSerializer
+
 
 
 
@@ -74,3 +77,14 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         if self.request.user.role != 'instructor':
             raise PermissionDenied("Only instructors can create assignments.")
         serializer.save(created_by=self.request.user)
+
+
+class SubmissionViewSet(viewsets.ModelViewSet):
+    queryset = Submission.objects.all()
+    serializer_class = SubmissionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        if self.request.user.role != 'student':
+            raise PermissionDenied("Only students can submit assignments.")
+        serializer.save(student=self.request.user)

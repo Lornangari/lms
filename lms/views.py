@@ -79,12 +79,24 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         serializer.save(created_by=self.request.user)
 
 
+
 class SubmissionViewSet(viewsets.ModelViewSet):
     queryset = Submission.objects.all()
     serializer_class = SubmissionSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == 'instructor':
+            return Submission.objects.filter(assignment__created_by=user)
+        return Submission.objects.filter(student=user)
+
     def perform_create(self, serializer):
         if self.request.user.role != 'student':
             raise PermissionDenied("Only students can submit assignments.")
         serializer.save(student=self.request.user)
+
+    def perform_update(self, serializer):
+        if self.request.user.role != 'instructor':
+            raise PermissionDenied("Only instructors can update grades.")
+        serializer.save()

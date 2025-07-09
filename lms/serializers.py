@@ -78,4 +78,8 @@ class SubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Submission
         fields = ['id', 'assignment', 'student', 'content', 'submitted_at', 'grade', 'feedback']
-        read_only_fields = ['student', 'submitted_at']
+        read_only_fields = ['student', 'submitted_at', 'assignment', 'student']
+
+
+
+

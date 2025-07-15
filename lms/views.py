@@ -13,6 +13,7 @@ from .models import Assignment
 from .serializers import AssignmentSerializer
 from .models import Submission
 from .serializers import SubmissionSerializer
+from rest_framework.permissions import AllowAny
 
 
 
@@ -21,7 +22,7 @@ from .serializers import SubmissionSerializer
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
 # Get current logged-in user
 class ProfileView(APIView):
